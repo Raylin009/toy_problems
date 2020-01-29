@@ -19,92 +19,9 @@
  */
 
 
-
-
-
-
-
-
-
-/* 1
-let sto = null
+/* 
 [
-  [ 1, 2, 3, 4, 5], matrix[v][h]
-  [16, 1, 2, 3, 6],
-  [15, 8, 1, 4, 7],
-  [14, 7, 6, 5, 8],
-  [13,12,11,10, 9],
-]
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 2
-temp = 1
-[ 
-  [ null, 2, 3, 4, 5], matrix[v][h]
-  [16, 1, 2, 3, 6],
-  [15, 8, 1, 4, 7],
-  [14, 7, 6, 5, 8],
-  [13,12,11,10, 9],
-]
-*/
-/*3
-temp 2
-[ 
-  [ null, 1, 3, 4, 5], matrix[v][h]
-  [16, 1, 2, 3, 6],
-  [15, 8, 1, 4, 7],
-  [14, 7, 6, 5, 8],
-  [13,12,11,10, 9],
-]
-*//* 4
-[
-  [ null, 1, 2, 3, 5], matrix[v][h]
-  [16, 1, 2, 3, 6],
-  [15, 8, 1, 4, 7],
-  [14, 7, 6, 5, 8],
-  [13,12,11,10, 9],
-]
-*//* 5
-[
-  [ null, 1, 2, 3, 4], matrix[v][h] 
-  [16, 1, 2, 3, 6],
-  [15, 8, 1, 4, 7],
-  [14, 7, 6, 5, 8],
-  [13,12,11,10, 9],
-]
-*//*
-[
-  [ 1, 2, 3, 4, 5], matrix[v][h]
-  [16, 1, 2, 3, 6],
-  [15, 8, 1, 4, 7],
-  [14, 7, 6, 5, 8],
-  [13,12,11,10, 9],
-]
-*//*
-[
-  [ 1, 2, 3, 4, 5], matrix[v][h]
+  [ 1, 2, 3, 4, 5],
   [16, 1, 2, 3, 6],
   [15, 8, 1, 4, 7],
   [14, 7, 6, 5, 8],
@@ -121,14 +38,13 @@ temp 2
       //shift one number at a time
   //}
 
+
+
   const rotateInPlace = matrix => {
     triversRing(matrix)
-    return matrix
   };
   
   const triversRing = matrix => {
-    //break down the matrix in rings
-    //call cb on every ring
     const numOfRing = Math.floor(matrix.length / 2)
     for(let ringNum = 0; ringNum < numOfRing; ringNum += 1){
       triversCircle(ringNum, matrix);
@@ -136,44 +52,73 @@ temp 2
   };
   
   const triversCircle = (ringNum, matrix) => {
-    //go right, down, left, up
-      //sift1
+    let repeatTimes = matrix.length - 1 - ringNum;
+    const min = ringNum;
+    const max = matrix.length - 1 - ringNum;
   
-    /*
-      while(iterationNumber !== matrix.length - 1){
-        travelRight()
-        travelDown()
-        travelLeft()
-        travelUp()
-        iterationNumber++
-      }
-    */
-    // const limitLeft = ringNum;
-    // const limitRight = matrix.length - 1 - ringNum;
-    // const st = { h : ringNum, v : ringNum };
-    // const cur = { h : ringNum, v : ringNum };
-    // let sto = null
-    travelRight(ringNum, matrix, limitLeft, limitRight, sto)
-    travelDown(ringNum, matrix, limitLeft, limitRight, sto)
-    travelLeft(ringNum, matrix, limitLeft, limitRight, sto)
-    travelUp(ringNum, matrix, limitLeft, limitRight, sto)
-  };
+    for(let i = min; i < max; i += 1){
+      const cash = { val: matrix[ringNum][ringNum] }
   
-  const travelRight = (ringNum, matrix, limitLeft, limitRight) => {
-      //matrix[v][h]
-      //increas h to max
-        // invoke shift
-  
-      for(let i = min; i <= matrix; i += 1){
-        //shift(matrix[min][i])
-  
-      }
+      travelRight(min, max, cash, matrix);
+      travelDown(min, max, cash, matrix);
+      travelLeft(min, max, cash, matrix);
+      travelUp(min, max, cash, matrix);
+    }
   }
   
-  const shift = (matrix, min, i) => {
-    //shift 1 
-    //declate temp
-    //assign temp current grid value
-    //assign current grid with sto's value
+  const travelRight = (min, max, sto, matrix) => {
+  
+    for(let i = min + 1; i <= max; i += 1){
+      const temp = matrix[min][i];
+      matrix[min][i] = sto.val;
+      sto.val = temp
+    }
+    return sto
   }
+  
+  const travelDown = (min, max, sto, matrix) => {
+  
+    for(let i = min + 1; i <= max; i += 1){
+      const temp = matrix[i][max];
+      matrix[i][max] = sto.val;
+      sto.val = temp
+    }
+    return sto
+  
+  }
+  
+  const travelLeft = (min, max, sto, matrix) => {
+  
+    for(let i = max - 1; i >= min; i -= 1){
+      const temp = matrix[max][i];
+      matrix[max][i] = sto.val;
+      sto.val = temp
+    }
+    return sto
+  
+  }
+  
+  const travelUp = (min, max, sto, matrix) => {
+  
+    for(let i = max - 1; i >= min; i -= 1){
+      const temp = matrix[i][min];
+      matrix[i][min] = sto.val;
+      sto.val = temp
+    }
+    return sto
+  
+  }
+  
+  
+  let fiveByFive = [
+    [ 1, 2, 3, 4, 5], 
+    [16, 1, 2, 3, 6],
+    [15, 8, 1, 4, 7],
+    [14, 7, 6, 5, 8],
+    [13,12,11,10, 9],
+  ]
+  
+  rotateInPlace(fiveByFive)
+  console.log(fiveByFive)
+  
   
